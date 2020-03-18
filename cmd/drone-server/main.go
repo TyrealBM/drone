@@ -36,19 +36,21 @@ import (
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
 )
-
+//服务段主函数
 func main() {
+	//通过 flag 函数获取命令 配置文件
 	var envfile string
 	flag.StringVar(&envfile, "env-file", ".env", "Read in a file of environment variables")
 	flag.Parse()
-
+	//加载配置文件，把配置文件加载到环境中
 	godotenv.Load(envfile)
+	//读取配置文件设置
 	config, err := config.Environ()
 	if err != nil {
 		logger := logrus.WithError(err)
 		logger.Fatalln("main: invalid configuration")
 	}
-
+	//初始化日志系统配置
 	initLogging(config)
 	ctx := signal.WithContext(
 		context.Background(),
@@ -59,7 +61,7 @@ func main() {
 	if logrus.IsLevelEnabled(logrus.TraceLevel) {
 		fmt.Println(config.String())
 	}
-
+	//初始化应用
 	app, err := InitializeApplication(config)
 	if err != nil {
 		logger := logrus.WithError(err)

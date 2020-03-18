@@ -77,7 +77,7 @@ func (d *Datadog) Start(ctx context.Context) error {
 	}
 }
 
-func (d *Datadog) do(ctx context.Context, unix int64) error {
+func (d *Datadog)  do(ctx context.Context, unix int64) error {
 	users, err := d.users.Count(ctx)
 	if err != nil {
 		return err
